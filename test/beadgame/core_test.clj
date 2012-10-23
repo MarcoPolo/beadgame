@@ -1,0 +1,7 @@
+(ns beadgame.core-test
+  (:use clojure.test
+        beadgame.core))
+
+(deftest a-test
+  (testing "FIXME, I fail."
+    (is (= 0 1))))
