@@ -3,6 +3,7 @@
 /checkouts
 pom.xml
 *.jar
+*.sw?
 *.class
 .lein-deps-sum
 .lein-failures
