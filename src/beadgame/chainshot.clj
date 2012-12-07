@@ -58,7 +58,8 @@
   ; When we find an empty vector we get rid of it
   
   (try 
-    (let [ color (getColor boardState x y) [startCol endCol] (findRange (getRow boardState x) y color) ] 
+    (let [ color (getColor boardState x y) 
+           [startCol endCol] (findRange (getRow boardState x) y color) ] 
       (vec (filterColumns boardState startCol endCol x y color)))
     (catch Exception e boardState)))
 
@@ -87,7 +88,7 @@
 
 (defn calculatePoints [currentState nextState]
   (let [delta (- (piecesLeft currentState) (piecesLeft nextState))]
-  (if (< 1 delta)
+  (if (< 2 delta)
     (Math/pow (- delta 2) 2)
     0 )))
 
@@ -108,6 +109,37 @@
   (println "You want to make a move somewhere with a group of colours, given that group is > 1 ")
   (println "After you pick a move I will calculate how many points you \"deserve\"")
   (println "After you have exhausted all the moves, the game is over and at least one of us will be dissapointed"))
+
+(comment 
+  (printBoard currentState)
+  (println (readFile "startBoard"))
+  currentState
+  file
+  (keepPlaying currentState)
+  (def currentState (readFile "startBoard"))
+  (slurp "startBoard")
+
+  (def asdf (getPossibleMoves currentState))
+
+
+
+
+  (def asdf (filter #(< 1 (first %)) asdf))
+
+  (first asdf)
+
+  )
+
+(defn getPossibleMoves
+  "Returns a seq with delta pieces as well as the coordinatess forthe moves"
+  [currentState]
+  (let [startPieceCount (piecesLeft currentState)]
+    (->> 
+      (for [x (range colLength) y (range rowLength) 
+            :let [nextState (chooseMove currentState x y)
+                  pointsGained (calculatePoints currentState nextState)]] 
+        [pointsGained x y])
+      (filter #(pos? (first %)))))) ;only care about the moves which loose > 2 pieces because those are the only valid ones
 
 (defn playGame []
   "Would you like to play a game?"
